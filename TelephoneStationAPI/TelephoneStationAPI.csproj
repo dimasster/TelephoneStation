@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="FluentResults" Version="3.15.2" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdminMicroServiceAPI\AdminMicroServiceAPI.csproj" />
+    <ProjectReference Include="..\AuthorizationMicroServiceAPI\AuthorizationMicroServiceAPI.csproj" />
+    <ProjectReference Include="..\BallanceMicroServiceAPI\BallanceMicroServiceAPI.csproj" />
+    <ProjectReference Include="..\CallMicroServiceAPI\CallMicroServiceAPI.csproj" />
+    <ProjectReference Include="..\ReceiptMicroServiceAPI\ReceiptMicroServiceAPI.csproj" />
+    <ProjectReference Include="..\ServiceMicroServiceAPI\ServiceMicroServiceAPI.csproj" />
+    <ProjectReference Include="..\SubscriptionMicroServiceAPI\SubscriptionMicroServiceAPI.csproj" />
+    <ProjectReference Include="..\TelephoneStationBLL\TelephoneStationBLL.csproj" />
+    <ProjectReference Include="..\UserMicroServiceAPI\UserMicroServiceAPI.csproj" />
+  </ItemGroup>
+
+</Project>
