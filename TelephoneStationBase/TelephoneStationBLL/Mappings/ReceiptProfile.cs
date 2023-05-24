@@ -9,11 +9,9 @@ public class ReceiptProfile : Profile
     {
         CreateMap<CallReceipt, ReceiptDTO>()
             .ForMember(r => r.Type, c => c.MapFrom(src => "call receipt"))
-            .ForPath(r => r.Datails, c => c
-                .MapFrom(r => r.CallId));
+            .ForPath(r => r.ItemId, c => c.MapFrom(r => r.CallId));
         CreateMap<SubscriptionReceipt, ReceiptDTO>()
             .ForMember(r => r.Type, c => c.MapFrom(src => "subscription receipt"))
-            .ForPath(r => r.Datails, c => c
-                .MapFrom(r => r.SubscriptionId));
+            .ForPath(r => r.ItemId, c => c.MapFrom(r => r.SubscriptionId));
     }
 }

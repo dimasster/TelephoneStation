@@ -4,4 +4,4 @@ using TelephoneStationBLL.DTO;
 
 namespace TelephoneStationBLL.MediatR.Account.LogIn;
 
-public record LogInAccountQuery(AccountDTO account) : IRequest<Result<UserDTO>>;
+public record LogInAccountQuery(AccountDTO account) : IRequest<Result<(UserDTO user, VerificationDTO verification)>>;

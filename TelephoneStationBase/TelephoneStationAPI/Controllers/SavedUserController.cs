@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Streetcode.WebApi.Controllers;
+using TelephoneStationBLL.DTO;
+using TelephoneStationBLL.MediatR.SavedUsers.Add;
 using TelephoneStationBLL.MediatR.SavedUsers.GetByUserId;
+using TelephoneStationBLL.MediatR.SavedUsers.Remove;
 
 namespace TelephoneStationAPI.Controllers
 {
@@ -8,29 +11,26 @@ namespace TelephoneStationAPI.Controllers
     [ApiController]
     public class SavedUserController : BaseApiController
     {
-        // GET api/<SavedUsersController>/5
-        [HttpGet("{user_id}")]
-        public async Task<IActionResult> Get(int user_id)
+        // GET api/SavedUser?user_id=1
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int user_id, [FromHeader] VerificationDTO verification)
         {
             return HandleResult(await Mediator.Send(new GetSavedUsersByUserIdQuery(user_id)));
         }
 
-        // POST api/<SavedUsersController>
+        // POST api/SavedUser
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Add([FromBody] Tuple<SavedUserRequestDTO, VerificationDTO> request)
         {
+            return HandleResult(await Mediator.Send(new AddSavedUserCommand(request.Item1, request.Item2)));
         }
 
-        // PUT api/<SavedUsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // DELETE api/SavedUser?user_id=1
+        [HttpDelete]
+        public async Task<ActionResult> Remove([FromQuery] int target_id, [FromBody] Tuple<int, VerificationDTO> request)
         {
-        }
-
-        // DELETE api/<SavedUsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var savedUserRequest = new SavedUserRequestDTO { UsertId = request.Item1, TargetId = target_id };
+            return HandleResult(await Mediator.Send(new RemoveSavedUserCommand(savedUserRequest, request.Item2)));
         }
     }
 }

@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Streetcode.WebApi.Controllers;
+using TelephoneStationBLL.DTO;
+using TelephoneStationBLL.MediatR.Subscriptions.AddUsage;
 using TelephoneStationBLL.MediatR.Subscriptions.GetByUserId;
+using TelephoneStationBLL.MediatR.Subscriptions.Resubscribe;
+using TelephoneStationBLL.MediatR.Subscriptions.Subscribe;
+using TelephoneStationBLL.MediatR.Subscriptions.Unsubscribe;
 
 namespace TelephoneStationAPI.Controllers
 {
@@ -8,29 +13,39 @@ namespace TelephoneStationAPI.Controllers
     [ApiController]
     public class SubscriptionController : BaseApiController
     {
-        // GET api/<SubscriptionsController>/5
-        [HttpGet("{user_id}")]
-        public async Task<IActionResult> Get(int user_id)
+        // GET api/Subscription?user_id=1
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int user_id, [FromHeader] VerificationDTO verification)
         {
             return HandleResult(await Mediator.Send(new GetSubscriptionByUserIdQuery(user_id)));
         }
 
-        // POST api/<SubscriptionsController>
+        // POST api/Subscription
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Subscribe([FromBody] Tuple<SubscriptionDTO, VerificationDTO> request)
         {
+            return HandleResult(await Mediator.Send(new SubscribeOnServiceCommand(request.Item1, request.Item2)));
         }
 
-        // PUT api/<SubscriptionsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // PUT api/Subscription
+        [HttpPut]
+        public async Task<ActionResult> Resubscribe([FromQuery] int user_id, [FromBody] Tuple<DateTime, VerificationDTO> request)
         {
+            return HandleResult(await Mediator.Send(new ResubscribeOnServiceCommand(user_id, request.Item1, request.Item2)));
         }
 
-        // DELETE api/<SubscriptionsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // PATCH api/Subscription?id=1
+        [HttpPatch]
+        public async Task<ActionResult> AddUsage([FromQuery] int user_id, [FromBody] Tuple<int, VerificationDTO> request)
         {
+            return HandleResult(await Mediator.Send(new AddUsageToSubscriptionCommand(user_id, request.Item1, request.Item2)));
+        }
+
+        // DELETE api/Subscription?user_id=1
+        [HttpDelete]
+        public async Task<ActionResult> Unsubscribe([FromQuery] int user_id, [FromBody] VerificationDTO verification)
+        {
+            return HandleResult(await Mediator.Send(new UnsubscribeFromServiceCommand(user_id, verification)));
         }
     }
 }

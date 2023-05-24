@@ -36,7 +36,7 @@ public class SignUpAccountHandler : IRequestHandler<SignUpAccountCommand, Result
                 new User() { 
                     Name = "unknown",
                     LastName = "unknown",
-                    PhoneNumber = 404,
+                    PhoneNumber = 380000000 + new Random().Next(1,999999),
                     Ballance = 0,
                     Role = UserRole.New
                 });

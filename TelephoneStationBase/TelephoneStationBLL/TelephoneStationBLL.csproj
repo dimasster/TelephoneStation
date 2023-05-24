@@ -22,8 +22,4 @@
     <ProjectReference Include="..\TelephoneStationDAL\TelephoneStationDAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MediatR\Account\Delete\" />
-  </ItemGroup>
-
 </Project>

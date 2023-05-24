@@ -7,7 +7,7 @@ using TelephoneStationDAL.UoW.Interfaces;
 
 namespace TelephoneStationBLL.MediatR.Calls.GetAll;
 
-public class GetAllCallsHandler : IRequestHandler<GetAllCallsQuery, Result<IEnumerable<CallDTO>>>
+public class GetAllCallsHandler : IRequestHandler<GetAllCallsQuery, Result<IEnumerable<CallResponceDTO>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -18,8 +18,9 @@ public class GetAllCallsHandler : IRequestHandler<GetAllCallsQuery, Result<IEnum
         _mapper = mapper;
     }
 
-    public async Task<Result<IEnumerable<CallDTO>>> Handle(GetAllCallsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<CallResponceDTO>>> Handle(GetAllCallsQuery request, CancellationToken cancellationToken)
     {
+        //todo add admin verification
         var calls = await _repositoryWrapper
             .CallRepo
             .GetAllAsync(
@@ -28,7 +29,7 @@ public class GetAllCallsHandler : IRequestHandler<GetAllCallsQuery, Result<IEnum
                     .Include(cl => cl.Target)
             );
 
-        var callDtos = _mapper.Map<IEnumerable<CallDTO>>(calls);
+        var callDtos = _mapper.Map<IEnumerable<CallResponceDTO>>(calls);
         return Result.Ok(callDtos);
     }
 }

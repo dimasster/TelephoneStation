@@ -2,6 +2,7 @@
 using System.Reflection;
 using TelephoneStationBLL.Mappings;
 using TelephoneStationBLL.MediatR.Calls.GetAll;
+using TelephoneStationBLL.Services;
 using TelephoneStationDAL;
 using TelephoneStationDAL.UoW.Interfaces;
 using TelephoneStationDAL.UoW.Realizations;
@@ -13,8 +14,11 @@ public static class Services
     {
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
+        services.AddSingleton<AuthorizationService>();
+
         var profileTypes = new List<Assembly>
         {
+            typeof(SavedUserProfile).Assembly,
             typeof(CallProfile).Assembly,
             typeof(ReceiptProfile).Assembly,
             typeof(ServiceProfile).Assembly,

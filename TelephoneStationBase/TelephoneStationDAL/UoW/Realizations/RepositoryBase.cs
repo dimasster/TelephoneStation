@@ -22,22 +22,28 @@ public class RepositoryBase<T>: IRepositoryBase<T> where T : class
     public async Task<T> CreateAsync(T entity)
     {
         var tmp = await _dbContext.Set<T>().AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
         return tmp.Entity;
     }
 
     public T Create(T entity)
     {
-        return _dbContext.Set<T>().Add(entity).Entity;
+        var tmp = _dbContext.Set<T>().Add(entity);
+        _dbContext.SaveChanges();
+        return tmp.Entity;
     }
 
     public EntityEntry<T> Update(T entity)
     {
-        return _dbContext.Set<T>().Update(entity);
+        var tmp = _dbContext.Set<T>().Update(entity);
+        _dbContext.SaveChanges();
+        return tmp;
     }
 
     public void Delete(T entity)
     {
         _dbContext.Set<T>().Remove(entity);
+        _dbContext.SaveChanges();
     }
 
     public IQueryable<T> Include(params Expression<Func<T, object>>[] includes)

@@ -4,7 +4,7 @@ using MediatR;
 using TelephoneStationBLL.DTO;
 using TelephoneStationDAL.UoW.Interfaces;
 
-namespace TelephoneStationBLL.MediatR.Receipt.GetAll;
+namespace TelephoneStationBLL.MediatR.Receipts.GetAll;
 
 public class GetAllReceiptsHandler : IRequestHandler<GetAllReceiptsQuery, Result<IEnumerable<ReceiptDTO>>>
 {

@@ -7,6 +7,7 @@ public class CallProfile: Profile
 {
     public CallProfile() 
     {
-        CreateMap<Call, CallDTO>().ReverseMap();
+        CreateMap<Call, CallResponceDTO>().ReverseMap();
+        CreateMap<Call, CallCreateDTO>().ReverseMap();
     }
 }

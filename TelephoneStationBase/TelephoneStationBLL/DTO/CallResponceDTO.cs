@@ -1,7 +1,7 @@
 ﻿using TelephoneStationDAL.Enums;
 
 namespace TelephoneStationBLL.DTO;
-public class CallDTO
+public class CallResponceDTO
 {
     public int Id { get; set; }
     public UserDTO? Caller { get; set; }

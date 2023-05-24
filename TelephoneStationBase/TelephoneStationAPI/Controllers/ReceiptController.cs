@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Streetcode.WebApi.Controllers;
-using TelephoneStationBLL.MediatR.Receipt.GetAll;
+using TelephoneStationBLL.DTO;
+using TelephoneStationBLL.MediatR.Receipts.Create;
+using TelephoneStationBLL.MediatR.Receipts.GetAll;
 using TelephoneStationBLL.MediatR.Receipts.GetByUserId;
+using TelephoneStationBLL.MediatR.Receipts.GetTotalDebt;
+using TelephoneStationBLL.MediatR.Receipts.Pay;
 
 namespace TelephoneStationAPI.Controllers
 {
@@ -9,36 +13,39 @@ namespace TelephoneStationAPI.Controllers
     [ApiController]
     public class ReceiptController : BaseApiController
     {
-        // GET: api/<ReceiptsController>
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        // GET: api/Receipt/all
+        [HttpGet("all")]
+        public async Task<IActionResult> Get([FromHeader] VerificationDTO verification)
         {
             return HandleResult(await Mediator.Send(new GetAllReceiptsQuery()));
         }
 
-        // GET api/<ReceiptsController>/5
-        [HttpGet("{user_id}")]
-        public async Task<IActionResult> Get(int user_id)
+        // GET api/Receipt?user_id=1
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int user_id, [FromHeader] VerificationDTO verification)
         {
             return HandleResult(await Mediator.Send(new GetReceiptsByUserIdQuery(user_id)));
         }
 
-        // POST api/<ReceiptsController>
+        // GET api/Receipt/debt?user_id=1
+        [HttpGet("debt")]
+        public async Task<ActionResult> GetTotalDebt([FromQuery] int user_id, [FromHeader] VerificationDTO verification)
+        {
+            return HandleResult(await Mediator.Send(new GetTotalDebtQuery(user_id, verification)));
+        }
+
+        // POST api/Receipt
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Create([FromBody] Tuple<ReceiptDTO, VerificationDTO> request)
         {
+            return HandleResult(await Mediator.Send(new CreateReceiptCommand(request.Item1, request.Item2)));
         }
 
-        // PUT api/<ReceiptsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // Patch api/Receipt?id=1
+        [HttpPatch]
+        public async Task<ActionResult> Pay([FromQuery] int id, [FromBody] VerificationDTO verification)
         {
-        }
-
-        // DELETE api/<ReceiptsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return HandleResult(await Mediator.Send(new PayReceiptCommand(id, verification)));
         }
     }
 }

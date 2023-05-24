@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Streetcode.WebApi.Controllers;
+using TelephoneStationBLL.DTO;
+using TelephoneStationBLL.MediatR.Calls.Create;
+using TelephoneStationBLL.MediatR.Calls.Finish;
 using TelephoneStationBLL.MediatR.Calls.GetAll;
 using TelephoneStationBLL.MediatR.Calls.GetAllByUserId;
+using TelephoneStationBLL.MediatR.Calls.GetById;
 
 namespace TelephoneStationAPI.Controllers;
 
@@ -9,35 +13,38 @@ namespace TelephoneStationAPI.Controllers;
 [ApiController]
 public class CallController : BaseApiController
 {
-    // GET: api/<CallsController>
+    // GET: api/Call/all
+    [HttpGet("all")]
+    public async Task<IActionResult> Get([FromHeader] VerificationDTO verification)
+    {
+        return HandleResult(await Mediator.Send(new GetAllCallsQuery(verification)));
+    }
+
+    // GET api/Call?user_id=1
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetByUserId([FromQuery] int user_id, [FromHeader] VerificationDTO verification)
     {
-        return HandleResult(await Mediator.Send(new GetAllCallsQuery()));
+        return HandleResult(await Mediator.Send(new GetAllCallsByUserIdQuery(user_id, verification)));
     }
 
-    // GET api/<CallsController>/5
-    [HttpGet("{user_id}")]
-    public async Task<IActionResult> Get(int user_id)
+    // GET api/Call/1
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id, [FromHeader] VerificationDTO verification)
     {
-        return HandleResult(await Mediator.Send(new GetAllCallsByUserIdQuery(user_id)));
+        return HandleResult(await Mediator.Send(new GetCallByIdQuery(id, verification)));
     }
 
-    // POST api/<CallsController>
+    // POST api/Call
     [HttpPost]
-    public void Post([FromBody] string value)
+    public async Task<ActionResult> Create([FromBody] Tuple<CallCreateDTO, VerificationDTO> request)
     {
+        return HandleResult(await Mediator.Send(new CreateCallCommand(request.Item1, request.Item2)));
     }
 
-    // PUT api/<CallsController>/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    // PATCH api/Call?id=1
+    [HttpPatch]
+    public async Task<ActionResult> Finish([FromQuery] int id, [FromBody] VerificationDTO verification)
     {
-    }
-
-    // DELETE api/<CallsController>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
-    {
+        return HandleResult(await Mediator.Send(new FinishCallCommand(id, verification)));
     }
 }

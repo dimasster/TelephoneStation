@@ -14,6 +14,7 @@ public class Service
 
     [Required]
     [Column(TypeName = "money")]
+    //cost per day
     public double SubscriptionCost { get; set; }
 
     [Required]

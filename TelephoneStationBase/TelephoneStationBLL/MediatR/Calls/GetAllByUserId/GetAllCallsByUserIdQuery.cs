@@ -4,4 +4,4 @@ using TelephoneStationBLL.DTO;
 
 namespace TelephoneStationBLL.MediatR.Calls.GetAllByUserId;
 
-public record GetAllCallsByUserIdQuery(int user_id) : IRequest<Result<IEnumerable<CallDTO>>>;
+public record GetAllCallsByUserIdQuery(int user_id, VerificationDTO verification) : IRequest<Result<IEnumerable<CallResponceDTO>>>;
